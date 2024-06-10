@@ -1,6 +1,0 @@
-@Api.TheSill_HostAddress = http://localhost:5038
-
-GET {{Api.TheSill_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
