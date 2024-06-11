@@ -1,6 +1,4 @@
 using System.Net;
-using Api.TheSill.src.domain.enums;
-
 using Newtonsoft.Json;
 
 namespace Api.TheSill.src.common.helpers

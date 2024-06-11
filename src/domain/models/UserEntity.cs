@@ -1,11 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Api.TheSill.src.domain.models
-{
+namespace Api.TheSill.src.domain.models {
     [Table("users")]
-    public class UserEntity
-    {
+    public class UserEntity {
         [Key]
         [Column(name: "id")]
         public Guid Id { get; set; } = Guid.NewGuid();

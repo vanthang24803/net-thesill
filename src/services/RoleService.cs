@@ -10,33 +10,26 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
 
-namespace Api.TheSill.src.services
-{
-    public class RoleService : IRoleService
-    {
+namespace Api.TheSill.src.services {
+    public class RoleService : IRoleService {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
 
-        public RoleService(ApplicationDbContext context, IMapper mapper)
-        {
+        public RoleService(ApplicationDbContext context, IMapper mapper) {
             _context = context;
             _mapper = mapper;
         }
 
-        public async Task<Response<List<RoleResponse>>> SeedRole()
-        {
+        public async Task<Response<List<RoleResponse>>> SeedRole() {
             List<Role> roles = [Role.ADMIN, Role.CUSTOMER, Role.MANAGER];
             List<RoleResponse> result = [];
 
-            foreach (Role role in roles)
-            {
-                if (ExistByName(role))
-                {
+            foreach (Role role in roles) {
+                if (ExistByName(role)) {
                     throw new BadRequestException("Role existed!");
                 }
 
-                var newRole = new RoleEntity
-                {
+                var newRole = new RoleEntity {
                     Role = role
                 };
 
@@ -49,8 +42,7 @@ namespace Api.TheSill.src.services
         }
 
 
-        public async Task<Response<List<RoleResponse>>> FindAll()
-        {
+        public async Task<Response<List<RoleResponse>>> FindAll() {
             var roles = await _context.Roles.ToListAsync();
 
             var roleResponses = _mapper.Map<List<RoleResponse>>(roles);
@@ -59,13 +51,11 @@ namespace Api.TheSill.src.services
         }
 
 
-        public bool ExistByName(Role role)
-        {
+        public bool ExistByName(Role role) {
             return _context.Roles.Any(n => n.Role == role);
         }
 
-        public async Task<RoleEntity> FindRoleByName(Role name)
-        {
+        public async Task<RoleEntity> FindRoleByName(Role name) {
             var role = await _context.Roles.FirstOrDefaultAsync(n => n.Role == name) ?? throw new NotFoundException("Role not found");
 
             return role;

@@ -1,9 +1,7 @@
 using Newtonsoft.Json;
 
-namespace Api.TheSill.src.common.exceptions
-{
-    public class ApiError
-    {
+namespace Api.TheSill.src.common.exceptions {
+    public class ApiError {
         [JsonProperty("status")]
         public int Status { get; set; }
 
