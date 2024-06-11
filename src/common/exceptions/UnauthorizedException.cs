@@ -1,3 +1,4 @@
+using System.Net;
 namespace Api.TheSill.src.common.exceptions
 {
     public class UnauthorizedException(string message = "Unauthorized") : Exception(message)
@@ -6,8 +7,8 @@ namespace Api.TheSill.src.common.exceptions
         {
             return new ApiError
             {
-                Status = 500,
-                Message = Message, 
+                Status = (int)HttpStatusCode.Unauthorized,
+                Message = Message,
                 Timestamp = DateTime.Now
             };
         }

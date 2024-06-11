@@ -14,11 +14,17 @@ namespace Api.TheSill.src.controllers
             _roleService = roleService;
         }
 
-        [HttpGet("test")]
-        public async Task<IActionResult> GetHelloWorld()
+        [HttpGet("seeds")]
+        public async Task<IActionResult> Seeds()
         {
-            var result = await _roleService.Save();
-            
+            var result = await _roleService.SeedRole();
+            return Ok(result);
+        }
+
+        [HttpGet()]
+        public async Task<IActionResult> GetAll()
+        {
+            var result = await _roleService.FindAll();
             return Ok(result);
         }
     }

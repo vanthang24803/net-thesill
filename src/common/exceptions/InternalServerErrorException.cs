@@ -1,3 +1,4 @@
+using System.Net;
 namespace Api.TheSill.src.common.exceptions
 {
     public class InternalServerErrorException(string message = "Internal Server Error") : Exception(message)
@@ -6,7 +7,7 @@ namespace Api.TheSill.src.common.exceptions
         {
             return new ApiError
             {
-                Status = 500,
+                Status = (int)HttpStatusCode.InternalServerError,
                 Message = Message, 
                 Timestamp = DateTime.Now
             };

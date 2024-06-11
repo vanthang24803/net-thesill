@@ -1,10 +1,16 @@
+using System.Net;
 using Newtonsoft.Json;
 
 namespace Api.TheSill.src.common.exceptions
 {
-    public class ErrorHandlingMiddleware(RequestDelegate next)
+    public class ErrorHandlingMiddleware
     {
-        private readonly RequestDelegate _next = next;
+        private readonly RequestDelegate _next;
+
+        public ErrorHandlingMiddleware(RequestDelegate next)
+        {
+            _next = next;
+        }
 
         public async Task Invoke(HttpContext context)
         {
@@ -14,35 +20,33 @@ namespace Api.TheSill.src.common.exceptions
             }
             catch (BadRequestException ex)
             {
-                await HandleExceptionAsync(context, ex, 400);
-
+                await HandleExceptionAsync(context, ex, HttpStatusCode.BadRequest);
             }
             catch (UnauthorizedException ex)
             {
-                await HandleExceptionAsync(context, ex, 401);
+                await HandleExceptionAsync(context, ex, HttpStatusCode.Unauthorized);
             }
             catch (NotFoundException ex)
             {
-                await HandleExceptionAsync(context, ex, 404);
+                await HandleExceptionAsync(context, ex, HttpStatusCode.NotFound);
             }
             catch (ForbiddenException ex)
             {
-                await HandleExceptionAsync(context, ex, 403);
+                await HandleExceptionAsync(context, ex, HttpStatusCode.Forbidden);
             }
             catch (InternalServerErrorException ex)
             {
-                await HandleExceptionAsync(context, ex, 500);
+                await HandleExceptionAsync(context, ex, HttpStatusCode.InternalServerError);
             }
-
         }
 
-        private static async Task HandleExceptionAsync(HttpContext context, Exception exception, int statusCode)
+        private static async Task HandleExceptionAsync(HttpContext context, Exception exception, HttpStatusCode statusCode)
         {
             context.Response.ContentType = "application/json";
-            context.Response.StatusCode = statusCode;
+            context.Response.StatusCode = (int)statusCode;
             var errorResponse = new ApiError
             {
-                Status = statusCode,
+                Status = (int)statusCode,
                 Message = exception.Message,
                 Timestamp = DateTime.Now
             };

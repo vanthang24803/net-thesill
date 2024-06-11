@@ -5,6 +5,7 @@ namespace Api.TheSill.src.context
 {
     public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
     {
-        DbSet<UserEntity> Users { get; set; }
+        public DbSet<UserEntity> Users { get; set; }
+        public DbSet<RoleEntity> Roles {get; set; }
     }
 }
