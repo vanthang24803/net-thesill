@@ -1,3 +1,4 @@
+using Api.TheSill.src.common.exceptions;
 using Api.TheSill.src.context;
 using Api.TheSill.src.repositories;
 using Api.TheSill.src.services;
@@ -27,6 +28,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 

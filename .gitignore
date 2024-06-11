@@ -62,7 +62,7 @@ dlldata.c
 # Benchmark Results
 BenchmarkDotNet.Artifacts/
 
-appsettings.json
+/appsettings.json
 
 # .NET
 project.lock.json

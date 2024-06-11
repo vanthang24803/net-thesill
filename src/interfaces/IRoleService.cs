@@ -4,6 +4,8 @@ namespace Api.TheSill.src.repositories
 {
     public interface IRoleService
     {
-       Task< Response<string>> Save();
+        Task<Response<string>> Save();
+
+        void SeedRole();
     }
 }
