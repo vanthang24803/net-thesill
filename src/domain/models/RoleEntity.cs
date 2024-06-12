@@ -14,7 +14,7 @@ namespace Api.TheSill.src.domain.models {
         [Column(name: "role_name")]
         public Role Role { get; set; } = Role.CUSTOMER;
 
-        public List<UserEntity> Users { get; set; } = [];
+        public List<UserEntity> Users { get; } = [];
 
         [Column(name: "create_at")]
         public DateTime CreateAt { get; set; } = DateTime.UtcNow;

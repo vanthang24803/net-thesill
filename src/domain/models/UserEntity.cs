@@ -33,8 +33,10 @@ namespace Api.TheSill.src.domain.models {
         [Column(name: "verify")]
         public bool VerifyEmail { get; set; }
 
-        public List<RoleEntity> Roles { get; set; } = [];
+        [Column(name: "refresh_token", TypeName = "TEXT")]
+        public string RefreshToken { get; set; } = string.Empty;
 
+        public List<RoleEntity> Roles { get; } = [];
 
         [Column(name: "create_at")]
         public DateTime CreateAt { get; set; } = DateTime.UtcNow;

@@ -1,25 +1,31 @@
-using Api.TheSill.src.repositories;
+using Api.TheSill.src.common.validations;
+using Api.TheSill.src.domain.dtos.auth;
+using Api.TheSill.src.interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.TheSill.src.controllers {
     [ApiController]
     [Route("api/auth")]
+    [ValidateModelState]
     public class AuthController : ControllerBase {
-        private readonly IRoleService _roleService;
 
-        public AuthController(IRoleService roleService) {
-            _roleService = roleService;
+        private readonly IAuthService _authService;
+
+        public AuthController(IAuthService authService) {
+            _authService = authService;
         }
 
-        [HttpGet("seeds")]
-        public async Task<IActionResult> Seeds() {
-            var result = await _roleService.SeedRole();
+        [HttpPost]
+        [Route("register")]
+        public async Task<IActionResult> Register([FromBody] SignInRequest request) {
+            var result = await _authService.Register(request);
             return Ok(result);
         }
 
-        [HttpGet()]
-        public async Task<IActionResult> GetAll() {
-            var result = await _roleService.FindAll();
+        [HttpPost]
+        [Route("login")]
+        public async Task<IActionResult> Login([FromBody] SignUpRequest request) {
+            var result = await _authService.Login(request);
             return Ok(result);
         }
     }
