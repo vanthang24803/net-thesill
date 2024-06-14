@@ -31,38 +31,62 @@ namespace Api.TheSill.src.common.helpers {
             return GenerateToken(payload, _refreshSecret, DateTime.Now.AddMonths(1));
         }
 
-        public bool VerifyRefreshToken(string token) {
-            return VerifyToken(token, _refreshSecret);
+        public JwtPayload VerifyRefreshToken(string token) {
+            return VerifyToken(token, _refreshSecret, validateLifetime: true);
         }
 
-        public bool VerifyAccessToken(string accessToken) {
+        public JwtPayload VerifyAccessToken(string accessToken) {
             return VerifyToken(accessToken, _authSecret);
         }
 
         private static List<Claim> ClaimsPayload(UserEntity user) {
-            var payload = new List<Claim> {
+            return [
                 new("name", $"{user.FirstName} {user.LastName}"),
                 new("email", user.Email),
                 new("id", user.Id.ToString()),
-            };
-            return payload;
+                new("roles", string.Join(",", MapRoles(user.Roles))),
+            ];
         }
 
 
-        private bool VerifyToken(string token, SymmetricSecurityKey key) {
+        private static List<string> MapRoles(List<RoleEntity> roles) {
+            var rolesMap = new List<string>();
+
+            foreach (var role in roles) {
+                rolesMap.Add(role.Role.ToString());
+            }
+
+            return rolesMap;
+        }
+
+        private JwtPayload VerifyToken(string token,
+                            SymmetricSecurityKey key,
+                            bool validateLifetime = true
+          ) {
             var tokenHandler = new JwtSecurityTokenHandler();
             try {
-                tokenHandler.ValidateToken(token, new TokenValidationParameters {
+                var claimsPrincipal = tokenHandler.ValidateToken(token, new TokenValidationParameters {
                     ValidateIssuer = true,
                     ValidateAudience = true,
-                    ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
+                    ValidateLifetime = validateLifetime,
                     ValidIssuer = _configuration["JWT:ValidIssuer"],
                     ValidAudience = _configuration["JWT:ValidAudience"],
                     IssuerSigningKey = key
                 }, out SecurityToken validatedToken);
 
-                return true;
+                var payload = new JwtPayload();
+
+                foreach (Claim claim in claimsPrincipal.Claims) {
+                    if (claim.Type == "id") {
+                        payload.Id = Guid.Parse(claim.Value);
+                    } else if (claim.Type == "exp") {
+                        payload.Expires = DateTimeOffset.FromUnixTimeSeconds(long.Parse(claim.Value)).DateTime;
+                    }
+                }
+
+                return payload;
+
             } catch {
                 throw new UnauthorizedException();
             }

@@ -28,15 +28,15 @@ namespace Api.TheSill.src.domain.models {
         public string Password { get; set; } = string.Empty;
 
         [Column(name: "avatar", TypeName = "TEXT")]
-        public string Avatar { get; set; } = string.Empty;
+        public string? Avatar { get; set; }
 
         [Column(name: "verify")]
-        public bool VerifyEmail { get; set; }
+        public bool VerifyEmail { get; set; } = false;
 
         [Column(name: "refresh_token", TypeName = "TEXT")]
         public string RefreshToken { get; set; } = string.Empty;
 
-        public List<RoleEntity> Roles { get; } = [];
+        public List<RoleEntity> Roles { get; set; } = [];
 
         [Column(name: "create_at")]
         public DateTime CreateAt { get; set; } = DateTime.UtcNow;

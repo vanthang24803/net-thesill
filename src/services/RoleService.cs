@@ -1,6 +1,7 @@
 using System.Net;
 using Api.TheSill.src.common.exceptions;
 using Api.TheSill.src.common.helpers;
+using Api.TheSill.src.common.message;
 using Api.TheSill.src.context;
 using Api.TheSill.src.domain.dtos.role;
 using Api.TheSill.src.domain.enums;
@@ -26,7 +27,7 @@ namespace Api.TheSill.src.services {
 
             foreach (Role role in roles) {
                 if (ExistByName(role)) {
-                    throw new BadRequestException("Role existed!");
+                    throw new BadRequestException(ErrorMessage.ROLE_EXIST);
                 }
 
                 var newRole = new RoleEntity {
@@ -56,7 +57,7 @@ namespace Api.TheSill.src.services {
         }
 
         public async Task<RoleEntity> FindRoleByName(Role name) {
-            var role = await _context.Roles.FirstOrDefaultAsync(n => n.Role == name) ?? throw new NotFoundException("Role not found");
+            var role = await _context.Roles.FirstOrDefaultAsync(n => n.Role == name) ?? throw new NotFoundException(ErrorMessage.ROLE_NOT_FOUND);
 
             return role;
         }

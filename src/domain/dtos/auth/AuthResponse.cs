@@ -8,6 +8,8 @@ namespace Api.TheSill.src.domain.dtos.auth {
 
         public string FirstName { get; set; } = string.Empty;
 
+        public string LastName { get; set; } = string.Empty;
+
         public string? Avatar { get; set; }
 
         public bool Verify { get; set; } = false;

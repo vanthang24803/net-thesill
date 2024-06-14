@@ -1,5 +1,6 @@
 using Api.TheSill.src.common.validations;
 using Api.TheSill.src.domain.dtos.auth;
+using Api.TheSill.src.domain.dtos.token;
 using Api.TheSill.src.interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,6 +20,16 @@ namespace Api.TheSill.src.controllers {
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] SignInRequest request) {
             var result = await _authService.Register(request);
+            return Ok(result);
+        }
+
+        [HttpPost]
+        [Route("refresh")]
+
+        public async Task<IActionResult> Refresh(
+            [FromBody] RefreshTokenRequest request
+        ) {
+            var result = await _authService.RefreshToken(request);
             return Ok(result);
         }
 
