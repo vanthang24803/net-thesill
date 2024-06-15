@@ -39,7 +39,7 @@ namespace Api.TheSill.src.services {
             }
 
             await _context.SaveChangesAsync();
-            return new Response<List<RoleResponse>> { Status = HttpStatusCode.Created, Result = result };
+            return new Response<List<RoleResponse>>(status: HttpStatusCode.Created, result: result);
         }
 
 
@@ -48,7 +48,7 @@ namespace Api.TheSill.src.services {
 
             var roleResponses = _mapper.Map<List<RoleResponse>>(roles);
 
-            return new Response<List<RoleResponse>> { Status = HttpStatusCode.OK, Result = roleResponses };
+            return new Response<List<RoleResponse>>(status: HttpStatusCode.Created, result: roleResponses);
         }
 
 
