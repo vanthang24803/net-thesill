@@ -10,5 +10,8 @@ namespace Api.TheSill.src.common.exceptions {
 
         [JsonProperty("timestamp")]
         public DateTime Timestamp = DateTime.Now;
+
+        public ApiError() {
+        }
     }
 }

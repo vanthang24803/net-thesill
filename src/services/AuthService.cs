@@ -52,7 +52,7 @@ namespace Api.TheSill.src.services {
                 AccessToken = accessToken,
             };
 
-            return new Response<TokenResponse> { Status = HttpStatusCode.OK, Result = result };
+            return new Response<TokenResponse>(status: HttpStatusCode.OK, result: result);
         }
 
         public async Task<Response<AuthResponse>> Register(SignInRequest register) {
@@ -75,21 +75,8 @@ namespace Api.TheSill.src.services {
 
             var response = _mapper.Map<AuthResponse>(newUser);
 
-            return new Response<AuthResponse> { Status = HttpStatusCode.Created, Result = response };
+            return new Response<AuthResponse>(status: HttpStatusCode.Created, result: response);
 
-        }
-
-
-        public bool ExistByEmail(string email) {
-            return _context.Users.Any(x => x.Email == email);
-        }
-
-        public async Task<UserEntity> FindUserByEmail(string email) {
-            return await _context.Users.Include(r => r.Roles).FirstOrDefaultAsync(n => n.Email == email) ?? throw new NotFoundException(ErrorMessage.USER_NOT_FOUND);
-        }
-
-        public async Task<UserEntity> FindUserById(Guid id) {
-            return await _context.Users.Include(r => r.Roles).FirstOrDefaultAsync(n => n.Id == id) ?? throw new NotFoundException(ErrorMessage.USER_NOT_FOUND);
         }
 
         public async Task<Response<TokenResponse>> RefreshToken(RefreshTokenRequest request) {
@@ -108,13 +95,26 @@ namespace Api.TheSill.src.services {
 
                 result.RefreshToken = refreshToken;
 
-                return new Response<TokenResponse> { Status = HttpStatusCode.OK, Result = result };
+                return new Response<TokenResponse>(status: HttpStatusCode.OK, result: result);
 
             }
 
             result.RefreshToken = user.RefreshToken;
 
-            return new Response<TokenResponse> { Status = HttpStatusCode.OK, Result = result };
+            return new Response<TokenResponse>(status: HttpStatusCode.OK, result: result);
+        }
+
+
+        public bool ExistByEmail(string email) {
+            return _context.Users.Any(x => x.Email == email);
+        }
+
+        public async Task<UserEntity> FindUserByEmail(string email) {
+            return await _context.Users.Include(r => r.Roles).FirstOrDefaultAsync(n => n.Email == email) ?? throw new NotFoundException(ErrorMessage.USER_NOT_FOUND);
+        }
+
+        public async Task<UserEntity> FindUserById(Guid id) {
+            return await _context.Users.Include(r => r.Roles).FirstOrDefaultAsync(n => n.Id == id) ?? throw new NotFoundException(ErrorMessage.USER_NOT_FOUND);
         }
     }
 }
