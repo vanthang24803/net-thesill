@@ -1,26 +1,20 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Api.TheSill.src.domain.enums;
 
 namespace Api.TheSill.src.domain.models {
-    [Table("Roles")]
-    public class RoleEntity {
+    [Table(name: "Categories")]
+    public class CategoryEntity {
         [Key]
         [Column(name: "id")]
         public Guid Id { get; set; } = Guid.NewGuid();
 
-        [Required]
+        [Column(name: "category_name")]
         [MaxLength(255)]
-        [Column(name: "role_name")]
-        public Role Role { get; set; } = Role.CUSTOMER;
+        public string Name { get; set; } = string.Empty;
 
-        public List<UserEntity> Users { get; set; } = [];
+        public List<ProductEntity> Products { get; set; } = [];
 
         [Column(name: "create_at")]
         public DateTime CreateAt { get; set; } = DateTime.UtcNow;
-
-        [Column(name: "update_at")]
-        public DateTime UpdateAt { get; set; } = DateTime.UtcNow;
-
     }
 }
