@@ -10,11 +10,5 @@ namespace Api.TheSill.src.interfaces {
         Task<Response<AuthResponse>> Register(SignInRequest register);
 
         Task<Response<TokenResponse>> RefreshToken(RefreshTokenRequest login);
-
-        bool ExistByEmail(string email);
-
-        Task<UserEntity> FindUserByEmail(string email);
-
-        Task<UserEntity> FindUserById(Guid id);
     }
 }

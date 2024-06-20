@@ -1,6 +1,5 @@
 using Api.TheSill.src.common.helpers;
 using Api.TheSill.src.domain.dtos.category;
-using Api.TheSill.src.domain.models;
 
 namespace Api.TheSill.src.interfaces {
     public interface ICategoryService {
@@ -14,12 +13,7 @@ namespace Api.TheSill.src.interfaces {
 
         Task<Response<CategoryResponse>> GetOne(Guid id);
 
-        Task<CategoryEntity> FindOne(Guid id);
-
         Task<Response<string>> Delete(Guid id);
 
-        bool ExistByName(string name);
-
-        Task<CategoryEntity> FindByName(string name);
     }
 }

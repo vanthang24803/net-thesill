@@ -14,11 +14,13 @@ using Microsoft.EntityFrameworkCore;
 namespace Api.TheSill.src.services {
     public class RoleService : IRoleService {
         private readonly ApplicationDbContext _context;
+        private readonly IRoleRepository _roleRepository;
         private readonly IMapper _mapper;
 
-        public RoleService(ApplicationDbContext context, IMapper mapper) {
+        public RoleService(ApplicationDbContext context, IMapper mapper, IRoleRepository roleRepository) {
             _context = context;
             _mapper = mapper;
+            _roleRepository = roleRepository;
         }
 
         public async Task<Response<List<RoleResponse>>> SeedRole() {
@@ -26,7 +28,7 @@ namespace Api.TheSill.src.services {
             List<RoleResponse> result = [];
 
             foreach (Role role in roles) {
-                if (ExistByName(role)) {
+                if (_roleRepository.ExistByName(role)) {
                     throw new BadRequestException(ErrorMessage.ROLE_EXIST);
                 }
 
@@ -48,18 +50,8 @@ namespace Api.TheSill.src.services {
 
             var roleResponses = _mapper.Map<List<RoleResponse>>(roles);
 
-            return new Response<List<RoleResponse>>(status: HttpStatusCode.Created, result: roleResponses);
+            return new Response<List<RoleResponse>>(status: HttpStatusCode.OK, result: roleResponses);
         }
-
-
-        public bool ExistByName(Role role) {
-            return _context.Roles.Any(n => n.Role == role);
-        }
-
-        public async Task<RoleEntity> FindRoleByName(Role name) {
-            var role = await _context.Roles.FirstOrDefaultAsync(n => n.Role == name) ?? throw new NotFoundException(ErrorMessage.ROLE_NOT_FOUND);
-
-            return role;
-        }
+       
     }
 }

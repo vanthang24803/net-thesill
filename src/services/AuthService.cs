@@ -9,31 +9,31 @@ using Api.TheSill.src.domain.models;
 using Api.TheSill.src.interfaces;
 using Api.TheSill.src.repositories;
 using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 
 namespace Api.TheSill.src.services {
     public class AuthService : IAuthService {
 
         private readonly ApplicationDbContext _context;
 
-        private readonly IRoleService _roleService;
+        private readonly IRoleRepository _roleRepository;
+
+        private readonly IAuthRepository _authRepository;
 
         private readonly TokenUtils _tokenUtils;
 
         private readonly IMapper _mapper;
 
-
-        public AuthService(ApplicationDbContext context, IRoleService roleService, TokenUtils tokenUtils, IMapper mapper) {
+        public AuthService(ApplicationDbContext context, TokenUtils tokenUtils, IMapper mapper, IRoleRepository roleRepository, IAuthRepository authRepository) {
             _context = context;
-            _roleService = roleService;
             _tokenUtils = tokenUtils;
             _mapper = mapper;
-
+            _roleRepository = roleRepository;
+            _authRepository = authRepository;
         }
 
         public async Task<Response<TokenResponse>> Login(SignUpRequest login) {
 
-            UserEntity user = await FindUserByEmail(login.Email);
+            UserEntity user = await _authRepository.FindUserByEmail(login.Email);
 
             if (!BCrypt.Net.BCrypt.EnhancedVerify(login.Password, user.Password)) {
                 throw new UnauthorizedException();
@@ -57,11 +57,11 @@ namespace Api.TheSill.src.services {
 
         public async Task<Response<AuthResponse>> Register(SignInRequest register) {
 
-            if (ExistByEmail(register.Email)) {
+            if (_authRepository.ExistByEmail(register.Email)) {
                 throw new BadRequestException(ErrorMessage.EMAIL_TAKEN);
             }
 
-            var customerRole = await _roleService.FindRoleByName(domain.enums.Role.CUSTOMER);
+            var customerRole = await _roleRepository.FindRoleByName(domain.enums.Role.CUSTOMER);
 
             UserEntity newUser = new();
             newUser.Roles.Add(customerRole);
@@ -82,7 +82,7 @@ namespace Api.TheSill.src.services {
         public async Task<Response<TokenResponse>> RefreshToken(RefreshTokenRequest request) {
             var payload = _tokenUtils.VerifyRefreshToken(request.Token);
 
-            var user = await FindUserById(payload.Id);
+            var user = await _authRepository.FindUserById(payload.Id);
 
             var result = new TokenResponse();
 
@@ -102,19 +102,6 @@ namespace Api.TheSill.src.services {
             result.RefreshToken = user.RefreshToken;
 
             return new Response<TokenResponse>(status: HttpStatusCode.OK, result: result);
-        }
-
-
-        public bool ExistByEmail(string email) {
-            return _context.Users.Any(x => x.Email == email);
-        }
-
-        public async Task<UserEntity> FindUserByEmail(string email) {
-            return await _context.Users.Include(r => r.Roles).FirstOrDefaultAsync(n => n.Email == email) ?? throw new NotFoundException(ErrorMessage.USER_NOT_FOUND);
-        }
-
-        public async Task<UserEntity> FindUserById(Guid id) {
-            return await _context.Users.Include(r => r.Roles).FirstOrDefaultAsync(n => n.Id == id) ?? throw new NotFoundException(ErrorMessage.USER_NOT_FOUND);
         }
     }
 }

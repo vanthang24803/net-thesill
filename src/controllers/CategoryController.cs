@@ -51,7 +51,7 @@ namespace Api.TheSill.src.services {
         public async Task<IActionResult> FindOne(
             Guid id
         ) {
-            return Ok(await _categoryService.FindOne(id));
+            return Ok(await _categoryService.GetOne(id));
         }
 
 

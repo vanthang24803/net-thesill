@@ -6,29 +6,27 @@ using Api.TheSill.src.context;
 using Api.TheSill.src.domain.dtos.category;
 using Api.TheSill.src.domain.models;
 using Api.TheSill.src.interfaces;
+using Api.TheSill.src.repositories;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
 namespace Api.TheSill.src.services {
     public class CategoryService : ICategoryService {
-
         private readonly ApplicationDbContext _context;
+        private readonly ICategoryRepository _categoryRepository;
         private readonly IMapper _mapper;
 
-        public CategoryService(ApplicationDbContext context, IMapper mapper) {
+        public CategoryService(ApplicationDbContext context, IMapper mapper, ICategoryRepository categoryRepository) {
             _context = context;
             _mapper = mapper;
-        }
-
-        public bool ExistByName(string name) {
-            return _context.Categories.Any(n => n.Name == name);
+            _categoryRepository = categoryRepository;
         }
 
         public async Task<Response<List<CategoryResponse>>> Seeds() {
             List<CategoryResponse> result = [];
 
             foreach (var category in Categories) {
-                if (ExistByName(category)) {
+                if (_categoryRepository.ExistByName(category)) {
                     throw new BadRequestException(message: ErrorMessage.CATEGORY_NAME_EXISTED);
                 }
 
@@ -69,7 +67,7 @@ namespace Api.TheSill.src.services {
         }
 
         public async Task<Response<CategoryResponse>> Update(Guid id, CategoryRequest request) {
-            var category = await FindOne(id);
+            var category = await _categoryRepository.FindOne(id);
 
             category.Name = request.Name;
 
@@ -83,7 +81,7 @@ namespace Api.TheSill.src.services {
 
         public async Task<Response<string>> Delete(Guid id) {
 
-            var category = await FindOne(id);
+            var category = await _categoryRepository.FindOne(id);
 
             _context.Categories.Remove(category);
 
@@ -94,23 +92,11 @@ namespace Api.TheSill.src.services {
         }
 
         public async Task<Response<CategoryResponse>> GetOne(Guid id) {
-            return new Response<CategoryResponse>(HttpStatusCode.OK, _mapper.Map<CategoryResponse>(await FindOne(id)));
-        }
-
-        public async Task<CategoryEntity> FindByName(string name) {
-            var category = await _context.Categories.FirstOrDefaultAsync(x => x.Name == name) ?? throw new NotFoundException(ErrorMessage.CATEGORY_NOT_FOUND);
-
-            return category;
-        }
-
-        public async Task<CategoryEntity> FindOne(Guid id) {
-            var category = await _context.Categories.FirstOrDefaultAsync(x => x.Id == id) ?? throw new NotFoundException(ErrorMessage.CATEGORY_NOT_FOUND);
-
-            return category;
+            return new Response<CategoryResponse>(HttpStatusCode.OK, _mapper.Map<CategoryResponse>(await _categoryRepository.FindOne(id)));
         }
 
         private readonly HashSet<string> Categories = [
-               "Tree",
+                "Tree",
                 "Plant",
                 "Planter",
                 "Plant Care",
