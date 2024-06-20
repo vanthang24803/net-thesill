@@ -8,5 +8,9 @@ namespace Api.TheSill.src.common.message {
         public const string USER_NOT_FOUND = "User not found!";
 
         public const string EMAIL_TAKEN = "Email taken!";
+
+        public const string CATEGORY_NAME_EXISTED = "Category name existed!";
+
+        public const string CATEGORY_NOT_FOUND = "Category not found!";
     }
 }

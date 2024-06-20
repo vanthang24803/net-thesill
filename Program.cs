@@ -52,6 +52,7 @@ builder.Services.AddAuthentication(
 // TODO: Service
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ICategoryService,CategoryService>();
 builder.Services.AddSingleton<TokenUtils>();
 
 var app = builder.Build();
