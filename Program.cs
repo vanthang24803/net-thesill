@@ -52,7 +52,10 @@ builder.Services.AddAuthentication(
 // TODO: Service
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<ICategoryService,CategoryService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IUploadService, UploadService>();
+builder.Services.AddScoped<IMailService, MailService>();
+
 builder.Services.AddSingleton<TokenUtils>();
 
 var app = builder.Build();

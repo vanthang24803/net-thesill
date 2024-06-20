@@ -1,4 +1,4 @@
-using System.Net;
+using Api.TheSill.src.common.validations;
 using Api.TheSill.src.domain.dtos.category;
 using Api.TheSill.src.interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Api.TheSill.src.services {
     [ApiController]
     [Route("api/categories")]
+    [ValidateModelState]
     public class CategoryController : ControllerBase {
         private readonly ICategoryService _categoryService;
 

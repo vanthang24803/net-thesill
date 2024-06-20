@@ -2,32 +2,33 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Api.TheSill.src.domain.models {
-    [Table(name: "Products")]
-    public class ProductEntity {
+    [Table(name: "Options")]
+    public class OptionEntity {
         [Key]
         [Column(name: "id")]
         public Guid Id { get; set; } = Guid.NewGuid();
 
         [Required]
         [MaxLength(255)]
-        [Column(name: "product_name")]
+        [Column(name: "option_name")]
         public string Name { get; set; } = string.Empty;
 
         [Required]
-        [Column(name: "product_thumbnail", TypeName = "TEXT")]
-        public string Thumbnail { get; set; } = string.Empty;
+        [Column(name: "option_price")]
+        public long Price { get; set; }
 
-        public string? Description { get; set; }
+        [Required]
+        [Column(name: "option_quantity")]
+        public long Quantity { get; set; }
 
-        public string? Guide { get; set; }
+        [Required]
+        [Column(name: "option_sale")]
+        public int Sale { get; set; } = 0;
 
-        public bool Published { get; set; }
+        [ForeignKey("ProductEntityId")]
+        public Guid? ProductEntityId { get; set; }
 
-        public List<CategoryEntity> Categories { get; set; } = [];
-
-        public List<PhotoEntity> Photos { get; set; } = [];
-
-        public List<OptionEntity> Options { get; set; } = [];
+        public ProductEntity ProductEntity { get; set; } = null!;
 
         [Column(name: "create_at")]
         public DateTime CreateAt { get; set; } = DateTime.UtcNow;
