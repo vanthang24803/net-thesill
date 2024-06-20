@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Api.TheSill.src.domain.models {
-    [Table("users")]
+    [Table("Users")]
     public class UserEntity {
         [Key]
         [Column(name: "id")]
