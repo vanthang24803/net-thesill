@@ -4,6 +4,7 @@ using Api.TheSill.src.common.helpers;
 using Api.TheSill.src.context;
 using Api.TheSill.src.interfaces;
 using Api.TheSill.src.repositories;
+using Api.TheSill.src.repositories.impl;
 using Api.TheSill.src.services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -52,8 +53,17 @@ builder.Services.AddAuthentication(
 // TODO: Service
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<ICategoryService,CategoryService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IUploadService, UploadService>();
+builder.Services.AddScoped<IMailService, MailService>();
+
 builder.Services.AddSingleton<TokenUtils>();
+
+
+// TODO : Repository
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 
 var app = builder.Build();
 

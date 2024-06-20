@@ -3,6 +3,7 @@ using System;
 using Api.TheSill.src.context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Api.TheSill.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240620023753_Init")]
+    partial class Init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,49 +45,6 @@ namespace Api.TheSill.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
-                });
-
-            modelBuilder.Entity("Api.TheSill.src.domain.models.OptionEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<DateTime>("CreateAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("create_at");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("option_name");
-
-                    b.Property<long>("Price")
-                        .HasColumnType("bigint")
-                        .HasColumnName("option_price");
-
-                    b.Property<Guid?>("ProductEntityId")
-                        .HasColumnType("uuid");
-
-                    b.Property<long>("Quantity")
-                        .HasColumnType("bigint")
-                        .HasColumnName("option_quantity");
-
-                    b.Property<int>("Sale")
-                        .HasColumnType("integer")
-                        .HasColumnName("option_sale");
-
-                    b.Property<DateTime>("UpdateAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("update_at");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductEntityId");
-
-                    b.ToTable("Options");
                 });
 
             modelBuilder.Entity("Api.TheSill.src.domain.models.PhotoEntity", b =>
@@ -260,15 +220,6 @@ namespace Api.TheSill.Migrations
                     b.ToTable("RoleEntityUserEntity");
                 });
 
-            modelBuilder.Entity("Api.TheSill.src.domain.models.OptionEntity", b =>
-                {
-                    b.HasOne("Api.TheSill.src.domain.models.ProductEntity", "ProductEntity")
-                        .WithMany("Options")
-                        .HasForeignKey("ProductEntityId");
-
-                    b.Navigation("ProductEntity");
-                });
-
             modelBuilder.Entity("Api.TheSill.src.domain.models.PhotoEntity", b =>
                 {
                     b.HasOne("Api.TheSill.src.domain.models.ProductEntity", "ProductEntity")
@@ -310,8 +261,6 @@ namespace Api.TheSill.Migrations
 
             modelBuilder.Entity("Api.TheSill.src.domain.models.ProductEntity", b =>
                 {
-                    b.Navigation("Options");
-
                     b.Navigation("Photos");
                 });
 #pragma warning restore 612, 618

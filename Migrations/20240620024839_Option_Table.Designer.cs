@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Api.TheSill.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240619082537_init")]
-    partial class init
+    [Migration("20240620024839_Option_Table")]
+    partial class Option_Table
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,11 +47,81 @@ namespace Api.TheSill.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("Api.TheSill.src.domain.models.OptionEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreateAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("create_at");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("option_name");
+
+                    b.Property<long>("Price")
+                        .HasColumnType("bigint")
+                        .HasColumnName("option_price");
+
+                    b.Property<Guid?>("ProductEntityId")
+                        .HasColumnType("uuid");
+
+                    b.Property<long>("Quantity")
+                        .HasColumnType("bigint")
+                        .HasColumnName("option_quantity");
+
+                    b.Property<int>("Sale")
+                        .HasColumnType("integer")
+                        .HasColumnName("option_sale");
+
+                    b.Property<DateTime>("UpdateAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("update_at");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductEntityId");
+
+                    b.ToTable("Options");
+                });
+
+            modelBuilder.Entity("Api.TheSill.src.domain.models.PhotoEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreateAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("create_at");
+
+                    b.Property<Guid?>("ProductEntityId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("photo_url");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductEntityId");
+
+                    b.ToTable("Photos");
+                });
+
             modelBuilder.Entity("Api.TheSill.src.domain.models.ProductEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<DateTime>("CreateAt")
                         .HasColumnType("timestamp with time zone")
@@ -193,6 +263,24 @@ namespace Api.TheSill.Migrations
                     b.ToTable("RoleEntityUserEntity");
                 });
 
+            modelBuilder.Entity("Api.TheSill.src.domain.models.OptionEntity", b =>
+                {
+                    b.HasOne("Api.TheSill.src.domain.models.ProductEntity", "ProductEntity")
+                        .WithMany("Options")
+                        .HasForeignKey("ProductEntityId");
+
+                    b.Navigation("ProductEntity");
+                });
+
+            modelBuilder.Entity("Api.TheSill.src.domain.models.PhotoEntity", b =>
+                {
+                    b.HasOne("Api.TheSill.src.domain.models.ProductEntity", "ProductEntity")
+                        .WithMany("Photos")
+                        .HasForeignKey("ProductEntityId");
+
+                    b.Navigation("ProductEntity");
+                });
+
             modelBuilder.Entity("CategoryEntityProductEntity", b =>
                 {
                     b.HasOne("Api.TheSill.src.domain.models.CategoryEntity", null)
@@ -221,6 +309,13 @@ namespace Api.TheSill.Migrations
                         .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Api.TheSill.src.domain.models.ProductEntity", b =>
+                {
+                    b.Navigation("Options");
+
+                    b.Navigation("Photos");
                 });
 #pragma warning restore 612, 618
         }

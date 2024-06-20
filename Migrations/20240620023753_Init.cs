@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Api.TheSill.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -28,7 +28,7 @@ namespace Api.TheSill.Migrations
                 name: "Products",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
                     product_name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     product_thumbnail = table.Column<string>(type: "TEXT", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
@@ -39,7 +39,7 @@ namespace Api.TheSill.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Products", x => x.Id);
+                    table.PrimaryKey("PK_Products", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -95,8 +95,27 @@ namespace Api.TheSill.Migrations
                         name: "FK_CategoryEntityProductEntity_Products_ProductsId",
                         column: x => x.ProductsId,
                         principalTable: "Products",
-                        principalColumn: "Id",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Photos",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    photo_url = table.Column<string>(type: "TEXT", nullable: false),
+                    ProductEntityId = table.Column<Guid>(type: "uuid", nullable: true),
+                    create_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Photos", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_Photos_Products_ProductEntityId",
+                        column: x => x.ProductEntityId,
+                        principalTable: "Products",
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -129,6 +148,11 @@ namespace Api.TheSill.Migrations
                 column: "ProductsId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Photos_ProductEntityId",
+                table: "Photos",
+                column: "ProductEntityId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RoleEntityUserEntity_UsersId",
                 table: "RoleEntityUserEntity",
                 column: "UsersId");
@@ -139,6 +163,9 @@ namespace Api.TheSill.Migrations
         {
             migrationBuilder.DropTable(
                 name: "CategoryEntityProductEntity");
+
+            migrationBuilder.DropTable(
+                name: "Photos");
 
             migrationBuilder.DropTable(
                 name: "RoleEntityUserEntity");
