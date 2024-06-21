@@ -12,5 +12,9 @@ namespace Api.TheSill.src.common.message {
         public const string CATEGORY_NAME_EXISTED = "Category name existed!";
 
         public const string CATEGORY_NOT_FOUND = "Category not found!";
+
+        public const string PRODUCT_NOT_FOUND = "Product not found!";
+
+        public const string UPLOAD_FAIL = "File uploaded fail!";
     }
 }

@@ -56,7 +56,11 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IUploadService, UploadService>();
 builder.Services.AddScoped<IMailService, MailService>();
+builder.Services.AddScoped<IProductService , ProductService>();
 
+
+
+// TODO: Helper
 builder.Services.AddSingleton<TokenUtils>();
 
 
@@ -64,6 +68,7 @@ builder.Services.AddSingleton<TokenUtils>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 var app = builder.Build();
 

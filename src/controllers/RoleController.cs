@@ -14,14 +14,12 @@ namespace Api.TheSill.src.controllers {
         [HttpGet]
         [Route("seeds")]
         public async Task<IActionResult> Seeds() {
-            var result = await _roleService.SeedRole();
-            return Ok(result);
+            return Ok(await _roleService.SeedRole());
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll() {
-            var result = await _roleService.FindAll();
-            return Ok(result);
+            return Ok(await _roleService.FindAll());
         }
     }
 }

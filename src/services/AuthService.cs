@@ -24,9 +24,9 @@ namespace Api.TheSill.src.services {
         private readonly IMapper _mapper;
 
         public AuthService(ApplicationDbContext context, TokenUtils tokenUtils, IMapper mapper, IRoleRepository roleRepository, IAuthRepository authRepository) {
+            _mapper = mapper;
             _context = context;
             _tokenUtils = tokenUtils;
-            _mapper = mapper;
             _roleRepository = roleRepository;
             _authRepository = authRepository;
         }

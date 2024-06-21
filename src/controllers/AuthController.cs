@@ -19,8 +19,7 @@ namespace Api.TheSill.src.controllers {
         [HttpPost]
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] SignInRequest request) {
-            var result = await _authService.Register(request);
-            return Ok(result);
+            return Ok(await _authService.Register(request));
         }
 
         [HttpPost]
@@ -29,15 +28,13 @@ namespace Api.TheSill.src.controllers {
         public async Task<IActionResult> Refresh(
             [FromBody] RefreshTokenRequest request
         ) {
-            var result = await _authService.RefreshToken(request);
-            return Ok(result);
+            return Ok(await _authService.RefreshToken(request));
         }
 
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] SignUpRequest request) {
-            var result = await _authService.Login(request);
-            return Ok(result);
+            return Ok(await _authService.Login(request));
         }
     }
 }

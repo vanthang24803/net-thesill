@@ -17,15 +17,12 @@ namespace Api.TheSill.src.services {
         [HttpGet]
         [Route("seeds")]
         public async Task<IActionResult> GetSeeds() {
-            var result = await _categoryService.Seeds();
-
-            return Ok(result);
+            return Ok(await _categoryService.Seeds());
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll() {
-            var result = await _categoryService.FindAll();
-            return Ok(result);
+            return Ok(await _categoryService.FindAll());
         }
 
         [HttpPost]
@@ -40,7 +37,7 @@ namespace Api.TheSill.src.services {
         [HttpPut]
         [Route("{id}")]
         public async Task<IActionResult> Update(
-            Guid id, [FromBody] CategoryRequest request
+                [FromRoute] Guid id, [FromBody] CategoryRequest request
         ) {
             return Ok(await _categoryService.Update(id, request));
         }
@@ -49,7 +46,7 @@ namespace Api.TheSill.src.services {
         [HttpGet]
         [Route("{id}")]
         public async Task<IActionResult> FindOne(
-            Guid id
+                [FromRoute] Guid id
         ) {
             return Ok(await _categoryService.GetOne(id));
         }
@@ -57,7 +54,7 @@ namespace Api.TheSill.src.services {
 
         [HttpDelete]
         [Route("{id}")]
-        public async Task<IActionResult> Delete(Guid id) {
+        public async Task<IActionResult> Delete([FromRoute] Guid id) {
             return Ok(await _categoryService.Delete(id));
         }
 
