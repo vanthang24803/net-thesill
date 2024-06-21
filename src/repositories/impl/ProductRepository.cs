@@ -1,5 +1,8 @@
+using Api.TheSill.src.common.exceptions;
+using Api.TheSill.src.common.message;
 using Api.TheSill.src.context;
 using Api.TheSill.src.domain.models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Api.TheSill.src.repositories.impl {
     public class ProductRepository : IProductRepository {
@@ -11,11 +14,22 @@ namespace Api.TheSill.src.repositories.impl {
         }
 
         public bool ExistProductById(Guid id) {
-            throw new NotImplementedException();
+            return _context.Products.Any(n => n.Id == id);
         }
 
-        public ProductEntity FindProductById(Guid id) {
-            throw new NotImplementedException();
+        public async Task<ProductEntity> FindProductById(Guid id) {
+            return await _context.Products
+                        .Include(p => p.Photos)
+                        .Include(p => p.Categories)
+                        .Include(p => p.Options)
+                        .FirstOrDefaultAsync(x => x.Id == id)
+                        ?? throw new NotFoundException(
+                            message: ErrorMessage.PRODUCT_NOT_FOUND
+                        );
+        }
+
+        public async Task<List<ProductEntity>> GetAll() {
+            return await _context.Products.ToListAsync();
         }
     }
 }
